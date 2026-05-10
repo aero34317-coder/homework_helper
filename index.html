@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>🌟 Homework Helper</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#fff9f0;min-height:100vh}
+.app{max-width:720px;margin:0 auto;padding:0 0 60px}
+.header{background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 50%,#FFC947 100%);padding:26px 22px 20px;text-align:center;border-radius:0 0 32px 32px;position:relative;overflow:hidden}
+.header::before{content:'✏️ 📚 🔭 🧮 🌍 🎨 🧬 📐';position:absolute;top:5px;left:0;right:0;font-size:12px;letter-spacing:5px;opacity:.28;pointer-events:none}
+.header h1{font-family:'Baloo 2',sans-serif;font-size:28px;font-weight:800;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.13);line-height:1.1}
+.header p{font-size:13px;color:rgba(255,255,255,.92);margin-top:5px;font-weight:600}
+.section{padding:14px 18px 0}
+.section-label{font-size:11px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
+.grade-grid{display:flex;flex-wrap:wrap;gap:7px}
+.grade-btn{width:50px;height:50px;border-radius:13px;border:2.5px solid #e0d8f0;background:#fff;cursor:pointer;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;color:#9b8fb5;transition:all .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.grade-btn:hover{border-color:#a78bfa;color:#7c3aed;transform:translateY(-2px)}
+.grade-btn.active{background:#7c3aed;border-color:#7c3aed;color:#fff;transform:translateY(-2px);box-shadow:0 4px 0 #5b21b6}
+.grade-btn .gn{font-size:17px;font-weight:800}
+.grade-btn .gs{font-size:9px;opacity:.8}
+.subj-row{display:flex;flex-wrap:wrap;gap:7px}
+.subj-chip{padding:6px 13px;border-radius:999px;border:2px solid transparent;background:#f3f0ff;cursor:pointer;font-size:12px;font-weight:700;color:#6d28d9;transition:all .15s}
+.subj-chip:hover{background:#ede9fe}
+.subj-chip.active{background:#6d28d9;color:#fff;border-color:#5b21b6;box-shadow:0 3px 0 #4c1d95}
+textarea{width:100%;min-height:96px;border-radius:18px 18px 0 0;border:2.5px solid #e0d8f0;border-bottom:none;padding:13px 15px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;color:#3b2f6b;background:#fff;resize:none;outline:none;transition:border-color .2s;line-height:1.5}
+textarea::placeholder{color:#c4b5e0;font-weight:600}
+textarea:focus{border-color:#7c3aed}
+.toolbar{display:flex;align-items:center;gap:7px;background:#fff;border:2.5px solid #e0d8f0;border-top:1.5px solid #f0eaff;border-radius:0 0 18px 18px;padding:9px 12px;flex-wrap:wrap}
+.tool-btn{display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:10px;border:2px solid #e0d8f0;background:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#6b7280;transition:all .15s;white-space:nowrap;user-select:none}
+.tool-btn:hover{border-color:#a78bfa;color:#7c3aed;background:#f5f3ff}
+.tool-btn.listening{background:#fef2f2;border-color:#fca5a5;color:#dc2626;animation:pulse-r 1s infinite}
+@keyframes pulse-r{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.3)}50%{box-shadow:0 0 0 5px rgba(220,38,38,0)}}
+.tool-btn.has-img{background:#f0fdf4;border-color:#6ee7b7;color:#065f46}
+.tlb-hint{margin-left:auto;font-size:11px;color:#d1c4e9;font-weight:600}
+input[type=file]{display:none}
+.voice-bar{margin:7px 0 0;padding:9px 14px;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:11px;font-size:12px;color:#dc2626;font-weight:700;display:none;align-items:center;gap:8px}
+.voice-dot{width:8px;height:8px;border-radius:50%;background:#dc2626;animation:pulse-r .8s infinite;flex-shrink:0}
+.img-prev-wrap{margin-top:9px;border:2px dashed #a78bfa;border-radius:14px;padding:10px 13px;background:#faf5ff;display:none;align-items:center;gap:10px}
+.img-prev-wrap img{width:56px;height:56px;object-fit:cover;border-radius:8px;border:2px solid #ddd6fe;flex-shrink:0}
+.img-info strong{font-size:13px;color:#7c3aed;font-weight:700;display:block}
+.img-info span{font-size:11px;color:#9ca3af}
+.img-rm{background:#fef2f2;border:1.5px solid #fca5a5;color:#dc2626;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;flex-shrink:0}
+.img-rm:hover{background:#fee2e2}
+.ask-btn{width:100%;margin-top:11px;padding:15px;border:none;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 5px 0 #5b21b6;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:9px}
+.ask-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 7px 0 #5b21b6}
+.ask-btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 3px 0 #5b21b6}
+.ask-btn:disabled{opacity:.65;cursor:not-allowed}
+.ans-card{margin:16px 18px 0;background:#fff;border-radius:22px;border:2.5px solid #d1fae5;padding:18px;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.ans-hdr{display:flex;align-items:center;gap:10px;margin-bottom:13px;padding-bottom:11px;border-bottom:2px dashed #a7f3d0}
+.owl-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#10b981,#34d399);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.ans-meta strong{display:block;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;color:#065f46}
+.ans-meta span{font-size:12px;color:#6ee7b7;font-weight:600}
+.ans-body{font-size:14px;line-height:1.85;color:#1a1a2e;font-weight:500;white-space:pre-wrap}
+.loading-dots{display:flex;gap:6px;align-items:center;padding:5px 0}
+.dot{width:9px;height:9px;border-radius:50%;background:#34d399;animation:bounce .9s infinite ease-in-out}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1.2);opacity:1}}
+.new-q-btn{display:block;margin:11px auto 0;background:none;border:2px solid #fca5a5;border-radius:999px;padding:6px 18px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#ef4444;cursor:pointer;transition:all .15s}
+.new-q-btn:hover{background:#fef2f2}
+.hist-bar{display:none;width:calc(100% - 36px);margin:16px 18px 0;padding:13px 18px;border-radius:16px;border:2.5px solid #fbbf24;background:#fffbeb;cursor:pointer;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;color:#92400e;align-items:center;justify-content:space-between;transition:background .15s}
+.hist-bar:hover{background:#fef3c7}
+.h-badge{background:#f59e0b;color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800}
+.hist-panel{margin:10px 18px 0;background:#fffbeb;border:2px solid #fde68a;border-radius:18px;overflow:hidden;animation:fadeUp .3s ease}
+.hist-actions{display:flex;gap:7px;padding:11px 13px;border-bottom:1.5px solid #fde68a;background:#fff8dc;flex-wrap:wrap}
+.ha{padding:7px 12px;border-radius:10px;border:2px solid #fbbf24;background:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#92400e;display:flex;align-items:center;gap:5px;transition:all .15s}
+.ha:hover{background:#fef3c7}
+.ha.wa{border-color:#4ade80;color:#166534}.ha.wa:hover{background:#f0fdf4}
+.ha.del{border-color:#fca5a5;color:#dc2626}.ha.del:hover{background:#fef2f2}
+.hist-scroll{max-height:430px;overflow-y:auto;padding:10px}
+.date-row{font-size:11px;font-weight:800;color:#d97706;padding:6px 4px 5px;letter-spacing:.5px;text-transform:uppercase}
+.hi{background:#fff;border-radius:13px;border:1.5px solid #fde68a;margin-bottom:8px;overflow:hidden}
+.hi-hd{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid #fef9c3;cursor:pointer;background:#fffef5;flex-wrap:wrap}
+.hi-hd:hover{background:#fefce8}
+.hi-time{font-size:11px;color:#d97706;font-weight:700;white-space:nowrap}
+.hi-gb{background:#7c3aed;color:#fff;border-radius:5px;padding:2px 6px;font-size:10px;font-weight:800;white-space:nowrap}
+.hi-sb{background:#dbeafe;color:#1d4ed8;border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;white-space:nowrap}
+.hi-pb{background:#f5f3ff;color:#7c3aed;border-radius:5px;padding:2px 6px;font-size:10px;font-weight:700}
+.hi-prev{flex:1;font-size:12px;color:#4b5563;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.hi-bd{padding:11px 13px;display:none}
+.hi-bd.open{display:block}
+.hi-ql{font-size:12px;font-weight:800;color:#374151;margin-bottom:4px}
+.hi-qt{font-size:12px;color:#374151;background:#f9fafb;border-radius:8px;padding:8px 10px;margin-bottom:9px;font-weight:600;line-height:1.5}
+.hi-al{font-size:12px;font-weight:800;color:#065f46;margin-bottom:4px}
+.hi-at{font-size:12px;color:#1a1a2e;line-height:1.65;white-space:pre-wrap;background:#f0fdf4;border-radius:8px;padding:8px 10px;font-weight:500}
+.hist-empty{padding:22px;text-align:center;color:#d97706;font-weight:700;font-size:13px}
+.err-card{margin:14px 18px 0;background:#fff5f5;border:2px solid #fca5a5;border-radius:18px;padding:14px;color:#b91c1c;font-size:13px;font-weight:600}
+.sess-note{margin:14px 18px 0;background:#fff;border:1.5px solid #e0d8f0;border-radius:14px;padding:11px 14px;font-size:12px;color:#9b8fb5;font-weight:600;text-align:center;line-height:1.5}
+.footer{text-align:center;padding:22px 18px 0;font-size:11px;color:#c4b5e0;font-weight:600}
+@media(max-width:480px){.header h1{font-size:23px}.grade-btn{width:45px;height:45px}.grade-btn .gn{font-size:15px}.tlb-hint{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🌟 Homework Helper</h1>
+    <p>Type, speak, or snap a photo — I'll walk you through every step!</p>
+  </div>
+
+  <div class="section" style="margin-top:18px">
+    <div class="section-label">📌 Your Grade</div>
+    <div class="grade-grid" id="gradeGrid"></div>
+  </div>
+
+  <div class="section" style="margin-top:14px">
+    <div class="section-label">📖 Subject</div>
+    <div class="subj-row" id="subjRow"></div>
+  </div>
+
+  <div class="section" style="margin-top:14px">
+    <div class="section-label">💬 Your Question</div>
+    <textarea id="qInput" placeholder="Type your question here… or tap 🎤 Voice or 📷 Photo below!"></textarea>
+    <div class="toolbar">
+      <button class="tool-btn" id="voiceBtn" onclick="toggleVoice()">🎤 Voice</button>
+      <button class="tool-btn" id="photoBtn" onclick="document.getElementById('photoInput').click()">📷 Photo</button>
+      <input type="file" id="photoInput" accept="image/*" onchange="handleImg(event)"/>
+      <span class="tlb-hint">Ctrl+Enter to send</span>
+    </div>
+    <div class="voice-bar" id="voiceBar">
+      <div class="voice-dot"></div>
+      <span id="voiceTxt">Listening… speak your question!</span>
+    </div>
+    <div class="img-prev-wrap" id="imgWrap">
+      <img id="imgThumb" src="" alt="preview"/>
+      <div class="img-info"><strong>📸 Photo ready!</strong><span id="imgFileName"></span></div>
+      <button class="img-rm" onclick="removeImg()">✕ Remove</button>
+    </div>
+    <button class="ask-btn" id="askBtn" onclick="askTutor()">
+      <span>🚀</span> Ask the Tutor!
+    </button>
+  </div>
+
+  <div id="ansArea"></div>
+
+  <button class="hist-bar" id="histBar" onclick="toggleHist()">
+    <span>📋 Session History — <span id="histCt">0 questions</span></span>
+    <span class="h-badge" id="histBadge">0</span>
+  </button>
+
+  <div id="histPanel" style="display:none" class="hist-panel">
+    <div class="hist-actions">
+      <button class="ha" onclick="copyMom()">📋 Copy for Mom</button>
+      <button class="ha wa" onclick="shareWA()">💬 WhatsApp</button>
+      <button class="ha" onclick="printHist()">🖨️ Print</button>
+      <button class="ha del" onclick="clearSess()">🗑️ Clear Session</button>
+    </div>
+    <div class="hist-scroll" id="histScroll">
+      <div class="hist-empty">No questions yet — start asking! 🌟</div>
+    </div>
+  </div>
+
+  <div class="sess-note" id="sessNote" style="display:none">
+    ℹ️ History saves for this session. Use <strong>Copy for Mom</strong> or <strong>Print</strong> before closing to keep a record.
+  </div>
+
+  <div class="footer">Made with ❤️ for curious minds &nbsp;·&nbsp; Powered by Claude AI</div>
+</div>
+
+<script>
+// ============================================================
+// PASTE YOUR CLOUDFLARE WORKER URL BELOW (keep the quotes)
+// Example: 'https://homework-helper.yourname.workers.dev'
+// ============================================================
+const WORKER_URL = 'PASTE_YOUR_WORKER_URL_HERE';
+// ============================================================
+
+const GRADES   = [{n:1,s:'st'},{n:2,s:'nd'},{n:3,s:'rd'},{n:4,s:'th'},{n:5,s:'th'},{n:6,s:'th'},{n:7,s:'th'},{n:8,s:'th'}];
+const SUBJECTS = [
+  {id:'math',l:'🧮 Maths'},{id:'science',l:'🔬 Science'},{id:'english',l:'📝 English'},
+  {id:'hindi',l:'🇮🇳 Hindi'},{id:'history',l:'🏛️ History'},{id:'geo',l:'🌍 Geography'},
+  {id:'art',l:'🎨 Art / Music'},{id:'other',l:'💡 Other'}
+];
+
+let grade=5, subj='other', msgs=[], history=[], image=null;
+let loading=false, listening=false, histOpen=false, recog=null;
+
+// Build grade buttons
+const gg = document.getElementById('gradeGrid');
+GRADES.forEach(g => {
+  const b = document.createElement('button');
+  b.className = 'grade-btn' + (g.n===grade?' active':'');
+  b.innerHTML = `<span class="gn">${g.n}</span><span class="gs">${g.s}</span>`;
+  b.onclick = () => { document.querySelectorAll('.grade-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); grade=g.n; };
+  gg.appendChild(b);
+});
+
+// Build subject chips
+const sr = document.getElementById('subjRow');
+SUBJECTS.forEach(s => {
+  const c = document.createElement('button');
+  c.className = 'subj-chip' + (s.id===subj?' active':'');
+  c.textContent = s.l;
+  c.onclick = () => { document.querySelectorAll('.subj-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); subj=s.id; };
+  sr.appendChild(c);
+});
+
+// VOICE
+function toggleVoice() { listening ? stopVoice() : startVoice(); }
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice input works in Chrome or Edge — please try one of those!'); return; }
+  recog = new SR(); recog.lang='en-IN'; recog.interimResults=true; recog.continuous=false;
+  recog.onstart = () => { listening=true; document.getElementById('voiceBtn').classList.add('listening'); document.getElementById('voiceBtn').textContent='⏹️ Stop'; document.getElementById('voiceBar').style.display='flex'; document.getElementById('voiceTxt').textContent='Listening… speak your question!'; };
+  recog.onresult = e => {
+    let fin='',int='';
+    for(let i=e.resultIndex;i<e.results.length;i++){ if(e.results[i].isFinal) fin+=e.results[i][0].transcript; else int+=e.results[i][0].transcript; }
+    const qi=document.getElementById('qInput');
+    if(fin){ qi.value+=(qi.value?' ':'')+fin; document.getElementById('voiceTxt').textContent='Got it! ✅ Keep speaking or tap Stop'; }
+    else if(int){ document.getElementById('voiceTxt').textContent='🎙️ Hearing: '+int; }
+  };
+  recog.onerror = () => stopVoice();
+  recog.onend   = () => stopVoice();
+  recog.start();
+}
+function stopVoice() {
+  listening=false; if(recog) recog.stop();
+  document.getElementById('voiceBtn').classList.remove('listening');
+  document.getElementById('voiceBtn').textContent='🎤 Voice';
+  document.getElementById('voiceBar').style.display='none';
+}
+
+// PHOTO
+function handleImg(e) {
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{ const d=ev.target.result; image={base64:d.split(',')[1],type:f.type,name:f.name}; document.getElementById('imgThumb').src=d; document.getElementById('imgFileName').textContent=f.name; document.getElementById('imgWrap').style.display='flex'; const pb=document.getElementById('photoBtn'); pb.classList.add('has-img'); pb.textContent='📷 ✅ Photo'; };
+  r.readAsDataURL(f); e.target.value='';
+}
+function removeImg() {
+  image=null; document.getElementById('imgWrap').style.display='none';
+  const pb=document.getElementById('photoBtn'); pb.classList.remove('has-img'); pb.textContent='📷 Photo';
+}
+
+// ASK
+async function askTutor() {
+  if(loading) return;
+  const q=document.getElementById('qInput').value.trim();
+  if(!q && !image){ document.getElementById('qInput').focus(); return; }
+  if(WORKER_URL==='PASTE_YOUR_WORKER_URL_HERE'){ alert('Please paste your Cloudflare Worker URL into the index.html file first (line 1 of the script).'); return; }
+
+  loading=true;
+  const btn=document.getElementById('askBtn'); btn.disabled=true; btn.innerHTML='<span>⏳</span> Thinking…';
+  const area=document.getElementById('ansArea');
+  area.innerHTML=`<div class="ans-card"><div class="ans-hdr"><div class="owl-av">🦉</div><div class="ans-meta"><strong>Your Tutor</strong><span>${glabel(grade)} Grade · ${slabel()}</span></div></div><div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+
+  const sys=`You are a warm, encouraging, patient tutor for a ${glabel(grade)} grade student in India, helping with ${slabel().replace(/[^\w\s]/g,'').trim()}.
+Rules:
+1. NEVER give the answer directly. Walk through it step by step (Step 1:, Step 2:, etc.).
+2. Use very simple language for a ${glabel(grade)} grader.
+3. Be cheerful and encouraging ("Great question!", "You can do this!").
+4. Always end with "✅ Final Answer:" section.
+5. Maths: show all working. Science/History/Geography: use Indian examples. Hindi: Devanagari + English.
+6. If a photo is attached: read it carefully and answer based on what you see.
+7. End with an encouraging line like "Keep up the great work! 🌟"
+8. Child-safe educational space only.`;
+
+  const txt=q||'Please help me with what you see in the attached photo.';
+  const userContent=image?[{type:'image',source:{type:'base64',media_type:image.type,data:image.base64}},{type:'text',text:txt}]:txt;
+  msgs.push({role:'user',content:userContent});
+  if(msgs.length>20) msgs=msgs.slice(-20);
+
+  try {
+    const res=await fetch(WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:msgs})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||'API error');
+    const answer=(data.content||[]).map(b=>b.text||'').join('');
+    msgs.push({role:'assistant',content:answer});
+
+    const now=new Date();
+    history.push({id:Date.now(),time:now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),dateKey:now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),grade,subject:slabel(),q:txt,a:answer,hasImg:!!image});
+    updateHistBar();
+
+    area.innerHTML=`<div class="ans-card"><div class="ans-hdr"><div class="owl-av">🦉</div><div class="ans-meta"><strong>Your Tutor</strong><span>${glabel(grade)} Grade · ${slabel()}</span></div></div><div class="ans-body">${esc(answer)}</div><button class="new-q-btn" onclick="newQ()">✕ Ask another question</button></div>`;
+    document.getElementById('qInput').value=''; removeImg();
+    area.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(err) {
+    area.innerHTML=`<div class="err-card">😕 Error: ${esc(err.message)}<br><br>Check that your Cloudflare Worker URL is correct in index.html.</div>`;
+  }
+  loading=false; btn.disabled=false; btn.innerHTML='<span>🚀</span> Ask the Tutor!';
+}
+function newQ(){ document.getElementById('ansArea').innerHTML=''; document.getElementById('qInput').focus(); }
+
+// HISTORY
+function updateHistBar(){
+  const n=history.length;
+  document.getElementById('histBar').style.display=n>0?'flex':'none';
+  document.getElementById('sessNote').style.display=n>0?'block':'none';
+  document.getElementById('histBadge').textContent=n;
+  document.getElementById('histCt').textContent=n+' question'+(n!==1?'s':'');
+  if(histOpen) renderHist();
+}
+function toggleHist(){ histOpen=!histOpen; document.getElementById('histPanel').style.display=histOpen?'block':'none'; if(histOpen) renderHist(); }
+function renderHist(){
+  const c=document.getElementById('histScroll');
+  if(!history.length){ c.innerHTML='<div class="hist-empty">No questions yet — start asking! 🌟</div>'; return; }
+  const groups={};
+  [...history].reverse().forEach(it=>{ const k=it.dateKey||'Today'; if(!groups[k]) groups[k]=[]; groups[k].push(it); });
+  c.innerHTML=Object.entries(groups).map(([date,items])=>`
+    <div class="date-row">📅 ${date}</div>
+    ${items.map(it=>`<div class="hi"><div class="hi-hd" onclick="togItem('${it.id}')"><span class="hi-time">🕐 ${it.time}</span><span class="hi-gb">Grade ${it.grade}</span><span class="hi-sb">${esc(it.subject)}</span>${it.hasImg?'<span class="hi-pb">📸</span>':''}<span class="hi-prev">${esc(it.q.substring(0,55))}${it.q.length>55?'…':''}</span></div><div class="hi-bd" id="hb-${it.id}"><div class="hi-ql">❓ Question</div><div class="hi-qt">${esc(it.q)}</div><div class="hi-al">🦉 Tutor's Answer</div><div class="hi-at">${esc(it.a)}</div></div></div>`).join('')}
+  `).join('');
+}
+function togItem(id){ const b=document.getElementById('hb-'+id); if(b) b.classList.toggle('open'); }
+
+function copyMom(){
+  if(!history.length){ alert('No history yet!'); return; }
+  const now=new Date();
+  let t=`📚 HOMEWORK HELPER — SESSION RECORD\nDate: ${now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} ${now.toLocaleTimeString('en-IN')}\nTotal: ${history.length} question${history.length!==1?'s':''}\n${'═'.repeat(48)}\n\n`;
+  history.forEach((it,i)=>{ t+=`Question ${i+1} — ${it.time}\nGrade: ${it.grade} | Subject: ${it.subject}${it.hasImg?' | 📸 Photo':''}\n\nQ: ${it.q}\n\nTutor: ${it.a}\n\n${'─'.repeat(48)}\n\n`; });
+  t+='Powered by Homework Helper (Claude AI)';
+  navigator.clipboard.writeText(t).then(()=>alert('✅ Copied! Paste into WhatsApp or email.')).catch(()=>alert('Could not copy — try a different browser.'));
+}
+function shareWA(){
+  if(!history.length){ alert('No history yet!'); return; }
+  const now=new Date();
+  let t=`📚 *Homework Helper Session*\n📅 ${now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}\n\n`;
+  history.slice(-10).forEach((it,i)=>{ t+=`*${i+1}. ${it.subject}:* ${it.q.substring(0,70)}${it.q.length>70?'…':''}\n`; });
+  if(history.length>10) t+=`_...and ${history.length-10} more_\n`;
+  t+=`\n_${history.length} question${history.length!==1?'s':''} answered by AI Tutor 🦉_`;
+  window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+}
+function printHist(){
+  if(!history.length){ alert('No history yet!'); return; }
+  const now=new Date();
+  const groups={};
+  history.forEach(it=>{ const k=it.dateKey||'Today'; if(!groups[k]) groups[k]=[]; groups[k].push(it); });
+  let h=`<html><head><title>Homework Helper Session</title><style>body{font-family:Arial,sans-serif;padding:22px;max-width:700px;margin:0 auto}h1{color:#7c3aed}h2{color:#d97706;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin:18px 0 7px}.item{margin-bottom:18px;border:1px solid #e5e7eb;border-radius:8px;padding:14px}.meta{font-size:12px;color:#6b7280;margin-bottom:8px}.ql{font-weight:bold;font-size:13px;margin-bottom:4px}.qb{font-size:13px;background:#f9fafb;padding:8px;border-radius:5px;margin-bottom:9px}.al{font-weight:bold;font-size:13px;color:#065f46;margin-bottom:4px}.ab{font-size:13px;background:#f0fdf4;padding:8px;border-radius:5px;white-space:pre-wrap;line-height:1.6}@media print{.item{page-break-inside:avoid}}</style></head><body>`;
+  h+=`<h1>📚 Homework Helper — Session Record</h1><p style="font-size:13px;color:#6b7280">Date: ${now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} | ${history.length} questions</p><hr/>`;
+  Object.entries(groups).forEach(([date,items])=>{ h+=`<h2>📅 ${date}</h2>`; items.forEach(it=>{ h+=`<div class="item"><div class="meta">🕐 ${it.time} | Grade ${it.grade} | ${esc(it.subject)}${it.hasImg?' | 📸 Photo':''}</div><div class="ql">❓ Question:</div><div class="qb">${esc(it.q)}</div><div class="al">🦉 Tutor's Answer:</div><div class="ab">${esc(it.a)}</div></div>`; }); });
+  h+='</body></html>';
+  const w=window.open('','_blank'); w.document.write(h); w.document.close(); w.print();
+}
+function clearSess(){
+  if(!confirm(`Clear all ${history.length} questions from this session?`)) return;
+  history=[]; msgs=[]; updateHistBar();
+  document.getElementById('histPanel').style.display='none';
+  document.getElementById('histScroll').innerHTML='<div class="hist-empty">No questions yet — start asking! 🌟</div>';
+  histOpen=false;
+}
+
+function glabel(n){ return n===1?'1st':n===2?'2nd':n===3?'3rd':n+'th'; }
+function slabel(){ return (SUBJECTS.find(s=>s.id===subj)||{}).l||'General'; }
+function esc(t){ return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+document.getElementById('qInput').addEventListener('keydown', e => { if((e.ctrlKey||e.metaKey)&&e.key==='Enter') askTutor(); });
+</script>
+</body>
+</html>
